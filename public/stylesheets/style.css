@@ -1,11 +1,18 @@
 @media (min-width: 992px) {
     .navbar-expand-lg .navbar-collapse {
         justify-content: space-between;
-    }    
+    }
 }
 
 .navbar {
     margin-bottom:20px;
+}
+
+@media (min-width: 576px) {
+    .nav-search {
+        position: absolute;
+        right: 5px;
+    }
 }
 
 .card {
