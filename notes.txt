@@ -2,8 +2,11 @@ MAKE A PLAN
 1. Write a test (if we were doing TDD (Test Driven Development) we'd start with this!)
 2. Make a search form - one input field and button that submits a url structured like this /search?term=pooodle
 3. Make a /search route that responds with a template pets-search.html (we'll just reuse the pets-index.pug template)
-4. Make the /search route actualy search using our Pet model.
+4. Make the /search route actually search using our Pet model.
 
 Tools:
 - Bootstrap 4 navbar form( search ): https://getbootstrap.com/docs/4.0/components/navbar/#forms
 - HTMl Converter:https://html2jade.org/
+
+Search Route (bug fix - helpful resource):
+https://stackoverflow.com/questions/7042340/error-cant-set-headers-after-they-are-sent-to-the-client?newreg=ec0251df45cf4b5ba46bf2c1c51cdc25
