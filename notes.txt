@@ -1,4 +1,5 @@
 MAKE A PLAN
+Implement Search Feature
 1. Write a test (if we were doing TDD (Test Driven Development) we'd start with this!)
 2. Make a search form - one input field and button that submits a url structured like this /search?term=pooodle
 3. Make a /search route that responds with a template pets-search.html (we'll just reuse the pets-index.pug template)
@@ -10,3 +11,12 @@ Tools:
 
 Search Route (bug fix - helpful resource):
 https://stackoverflow.com/questions/7042340/error-cant-set-headers-after-they-are-sent-to-the-client?newreg=ec0251df45cf4b5ba46bf2c1c51cdc25
+
+1. We are going to add pagination to the `/` and `/search` routes first and those both
+use the pets-index.pug template, so we can use bootstrap's pagination snippet to
+start that.
+
+2. Next we need to add the mongoose-paginate module to extend Mongoose with
+pagination methods to only return pages of 10 pets.
+
+3. Finally we need to write a test for both routes so that we can ship it!

@@ -4,8 +4,8 @@ module.exports = (app) => {
 
   /* GET home page. */
   app.get('/', (req, res) => {
-    Pet.find().exec((err, pets) => {
-      res.render('pets-index', { pets: pets });    
+    Pet.paginate().then((result) => {
+      res.render('pets-index', { pets: rsults.docs });
     });
   });
 }
