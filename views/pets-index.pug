@@ -14,13 +14,15 @@ block content
                 a.card-link(href=`/pets/${pet._id}`) View #{pet.name}
   nav(aria-label='Page navigation example').d-flex.justify-content-center
     ul.pagination
-        li.page-item
-            a.page-link(href='#') Previous
-        li.page-item
-            a.page-link(href='#') 1
-        li.page-item
-            a.page-link(href='#') 2
-        li.page-item
-            a.page-link(href='#') 3
-        li.page-item
-            a.page-link(href='#') Next
+        if currentPage > 1
+            li.page-item
+                a.page-link(href=`?page=${currentPage - 1}`) Previous
+
+        - var i = 1;
+        while i <= pagesCount
+            li.page-item
+                a.page-link(href=`?page=${i}`)= i++
+
+        if currentPage < pagesCount
+            li.page-item
+                a.page-link(href=`?page=${parseInt(currentPage) + 1}`) Next
