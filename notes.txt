@@ -20,3 +20,10 @@ start that.
 pagination methods to only return pages of 10 pets.
 
 3. Finally we need to write a test for both routes so that we can ship it!
+
+MAKE A PLAN
+User Narrative of How the User Should Experience Errors
+1. User puts in invalid data and hits submit
+2. Without navigating away, user sees specifically the form elements that still need work with directions for what to do
+3. User submits data that is still invalid (<1% of time)
+4. User sees a general and generic error message that something has occurred
