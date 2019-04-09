@@ -27,3 +27,14 @@ User Narrative of How the User Should Experience Errors
 2. Without navigating away, user sees specifically the form elements that still need work with directions for what to do
 3. User submits data that is still invalid (<1% of time)
 4. User sees a general and generic error message that something has occurred
+
+MAKE A PLAN
+1. Get an AWS console account
+2. Get our API public and secret keys and save them in our .env folder
+3. Make a new "bucket" in AWS S3
+4. Change the form to use multipart/form-data
+5. Add some middleware to accept multipart/form-data: multer
+6. Add some middleware to interact with the S3 API: s3-uploader
+7. Initialize and use the middleware in the controller route.
+8. Save the image URL into the database
+9. Display the image using the URL
