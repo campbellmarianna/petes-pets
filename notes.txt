@@ -60,3 +60,7 @@ Build Full-text Search
 
 Question: "Remember we're not using Regex in the code above, so we will no longer
 match partial strings" - What does this mean
+
+Respond to JSON
+1. Detect JSON Requests in addition to handling rendering as we did before
+2. Test API endpoints
