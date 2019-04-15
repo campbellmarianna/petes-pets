@@ -31,6 +31,8 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.locals.PUBLIC_STRIPE_API_KEY = process.env.PUBLIC_STRIPE_API_KEY
+
 require('./routes/index.js')(app);
 require('./routes/pets.js')(app);
 

@@ -29,6 +29,7 @@ User Narrative of How the User Should Experience Errors
 4. User sees a general and generic error message that something has occurred
 
 MAKE A PLAN
+Upload Images
 1. Get an AWS console account
 2. Get our API public and secret keys and save them in our .env folder
 3. Make a new "bucket" in AWS S3
@@ -38,3 +39,10 @@ MAKE A PLAN
 7. Initialize and use the middleware in the controller route.
 8. Save the image URL into the database
 9. Display the image using the URL
+
+Accept Payment
+1. Sign up for Stripe and get our public/private access keys
+2. Add the drop in stripe checkout
+3. Add stripe middleware for interacting with the stripe API.
+4. Process the payment on the server
+5. Save when the pet was purchased and by whom
