@@ -53,3 +53,10 @@ Send Emails
 3. Add your email credentials to your .env file.
 4. Send a sample email
 5. Setup emails to send whenever a pet is sold.
+
+Build Full-text Search
+1. Add an index/Remove Existing indexes
+2. Update your search query to use full text instead of regex
+
+Question: "Remember we're not using Regex in the code above, so we will no longer
+match partial strings" - What does this mean
