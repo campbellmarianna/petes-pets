@@ -46,3 +46,10 @@ Accept Payment
 3. Add stripe middleware for interacting with the stripe API.
 4. Process the payment on the server
 5. Save when the pet was purchased and by whom
+
+Send Emails
+1. Install and configure the nodemailer and nodemailer-mailgun-transport modules.
+2. Sign up for an account with Mailgun
+3. Add your email credentials to your .env file.
+4. Send a sample email
+5. Setup emails to send whenever a pet is sold.

@@ -1,3 +1,4 @@
+// server.js
 if (!process.env.PORT) {
   require('dotenv').config()
   process.env.NODE_ENV = "dev"
@@ -9,11 +10,14 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const methodOverride = require('method-override')
+const methodOverride = require('method-override');
+const mongoose = require('mongoose');
+const nodemailer = require('nodemailer');
+const mg = require('nodemailer-mailgun-transport');
 
 const app = express();
 
-const mongoose = require('mongoose');
+
 mongoose.connect('mongodb://localhost/petes-pets');
 
 // view engine setup
@@ -52,6 +56,39 @@ app.use((err, req, res, next) => {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+// auth with our mailgun API key and domain
+const auth = {
+    auth: {
+        api_key: process.env.MAILGUN_API_KEY,
+        domain: process.env.EMAIL_DOMAIN
+    }
+};
+
+// create a mailer
+const nodemailerMailgun = nodemailer.createTransport(mg(auth));
+
+// SEND EMAIL
+const user = {
+    email: 'marianna.campbell@students.makeschool.com',
+    name: 'Emily',
+    age: '43'
+};
+
+nodemailerMailgun.sendMail({
+    from: 'no-reply@example.com',
+    to: user.email, // An array if you have multiple
+    subject: 'Hey you, awesome!',
+    template: {
+        name: 'email.handlebars',
+        engine: 'handlebars',
+        content: user
+    }
+}).then(info => {
+    console.log('Response: ' + info);
+}).catch(err => {
+    console.log('Error: ' + err);
 });
 
 module.exports = app;
