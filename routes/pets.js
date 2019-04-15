@@ -126,11 +126,7 @@ module.exports = (app) => {
         // req.body.petId can become null through seeding,
         // this way we'll insure we use a non-null value
         let petId = req.body.petId || req.params.id;
-        console.log('petId:', petId);
         Pet.findById(petId).exec((err, pet) => {
-          console.log('pet:', pet);
-          console.log('pet.price:', pet.price);
-          console.log('Math.round(pet.price * 100):', Math.round(pet.price * 100));
           if(err) {
             console.log('Error: ' + err);
             res.redirect(`/pets/${req.params.id}`);
@@ -148,7 +144,7 @@ module.exports = (app) => {
           })
           .catch(err => {
             console.log('Error: ' + err);
-          });
+          }); // end of catch
         // })
     });
       // });
