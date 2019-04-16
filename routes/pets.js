@@ -3,30 +3,8 @@ const Pet = require('../models/pet');
 // UPLOADING TO AWS S3
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
-const Upload = require('s3-uploader');
 
-const client = new Upload(process.env.S3_BUCKET, {
-    aws: {
-        path: 'pets/avatar',
-        region: process.env.S3_REGION,
-        acl: 'public-read',
-        acessKEYId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-    },
-    cleanup: {
-        versions: true,
-        original: true
-    },
-    versions: [{
-        maxWidth: 400,
-        aspect: '16:10',
-        suffix: '-standard'
-    },{
-        maxWidth: 300,
-        aspect: '1:1',
-        suffix: '-square'
-    }]
-});
+const client = require('../lib/uploader').petClient;
 
 // PET ROUTES
 module.exports = (app) => {
@@ -38,22 +16,21 @@ module.exports = (app) => {
     });
 
     // CREATE PET
-    app.post('/pets', upload.single('avatar'), (req, res, next) => {
+    app.post('/pets', upload.single('avatar'), async(req, res, next) => {
         console.log(req.file)
         var pet = new Pet(req.body);
         pet.save(function (err) {
+            // if (err) {return res.status(400).send({ err }) };
             if (req.file) {
                 client.upload(req.file.path, {}, function (err, versions, meta) {
                     // STATUS OF 400 FOR VALIDATIONS
-                    if (err) {return res.status(400).send({ err: err }) };
+                    if (err) {return res.status(400).send({ err }) };
 
-                    versions.forEach(function (image) {
-                        var urlArray = image.url.split('-');
-                        urlArray.pop();
-                        var url = urlArray.join('-');
-                        pet.avatarUrl = url;
-                        pet.save();
-                    });
+                    const imgUrl = versions[0].url.split('-');
+                    imgUrl.pop();
+                    imgUrl.join('-');
+                    pet.avatarUrl = imgUrl;
+                    pet.save();
 
                     res.send({ pet: pet });
                 });
@@ -62,6 +39,34 @@ module.exports = (app) => {
             }
         });
     });
+
+    // CREATE PET (ASYNC)
+    // app.post('/pets', upload.single('avatar'), async (req, res) => {
+    //     var pet = new Pet(req.body);
+    //
+    //     try {
+    //       var pet = await pet.save();
+    //       if (req.file) {
+    //           client.upload(req.file.path, {}, function (err, versions, meta) {
+    //               // STATUS OF 400 FOR VALIDATIONS
+    //               if (err) {return res.status(400).send({ err }) };
+    //
+    //               versions.forEach(function (image) {
+    //                   var urlArray = image.url.split('-');
+    //                   urlArray.pop();
+    //                   var url = urlArray.join('-');
+    //                   pet.avatarUrl = url;
+    //                   pet.save();
+    //               });
+    //
+    //               res.send({ pet: pet });
+    //           });
+    //          res.send({ pet });
+    //      }
+    //     } catch (err) {
+    //       res.status(400).send(err.errors);
+    //     }
+    // });
 
     // SHOW PET
     app.get('/pets/:id', (req, res) => {
@@ -129,23 +134,26 @@ module.exports = (app) => {
         // req.body.petId can become null through seeding,
         // this way we'll insure we use a non-null value
         let petId = req.body.petId || req.params.id;
-        Pet.findById(petId).exec((err, pet) => {
-          if(err) {
-            console.log('Error: ' + err);
-            res.redirect(`/pets/${req.params.id}`);
-          }
-          const charge = stripe.charges.create({
-            amount: pet.price * 100,
-            currency: 'usd',
-            description: `Example charge`,
-            source: token,
-          }).then((chg) => {
-            res.redirect(`/pets/${req.params.id}`);
-            })
-          })
-          .catch(err => {
-            console.log('Error: ' + err);
-          }); // end of catch
+        Pet
+            .findById(petId) // finds the pet
+            .exec((err, pet) => {
+              if(err) {
+                console.log('Error: ' + err);
+                res.redirect(`/pets/${req.params.id}`);
+              }
+              const charge = stripe.charges.create({
+                amount: pet.price * 100,
+                currency: 'usd',
+                description: `Example charge`,
+                source: token,
+              })
+              .then((chg) => {
+                res.redirect(`/pets/${req.params.id}`);
+                })
+              })
+              .catch(err => {
+                console.log('Error: ' + err);
+              }); // end of catch
         // })
     });
       // });

@@ -59,7 +59,8 @@ Build Full-text Search
 2. Update your search query to use full text instead of regex
 
 Question: "Remember we're not using Regex in the code above, so we will no longer
-match partial strings" - What does this mean
+match partial strings" - What does this mean? We are now using Mongoose's Full
+Text feature so we no longer need Regex.
 
 Respond to JSON
 1. Detect JSON Requests in addition to handling rendering as we did before
