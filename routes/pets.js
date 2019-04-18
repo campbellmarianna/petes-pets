@@ -1,6 +1,9 @@
 // MODELS
 const Pet = require('../models/pet');
- // UPLOADING TO AWS S3
+
+const mailer = require('../utils/mailer');
+
+// UPLOADING TO AWS S3
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
@@ -45,34 +48,6 @@ module.exports = (app) => {
             }
         });
     });
-
-    // CREATE PET (ASYNC)
-    // app.post('/pets', upload.single('avatar'), async (req, res) => {
-    //     var pet = new Pet(req.body);
-    //
-    //     try {
-    //       var pet = await pet.save();
-    //       if (req.file) {
-    //           client.upload(req.file.path, {}, function (err, versions, meta) {
-    //               // STATUS OF 400 FOR VALIDATIONS
-    //               if (err) {return res.status(400).send({ err }) };
-    //
-    //               versions.forEach(function (image) {
-    //                   var urlArray = image.url.split('-');
-    //                   urlArray.pop();
-    //                   var url = urlArray.join('-');
-    //                   pet.avatarUrl = url;
-    //                   pet.save();
-    //               });
-    //
-    //               res.send({ pet: pet });
-    //           });
-    //          res.send({ pet });
-    //      }
-    //     } catch (err) {
-    //       res.status(400).send(err.errors);
-    //     }
-    // });
 
     // SHOW PET
     app.get('/pets/:id', (req, res) => {
@@ -154,15 +129,20 @@ module.exports = (app) => {
                 source: token,
               })
               .then((chg) => {
-                res.redirect(`/pets/${req.params.id}`);
-                })
+                // Convert the amount back to dollars for ease in displaying the template
+                    const user = {
+                        email: req.body.stripeEmail,
+                        amount: chg.amount / 100,
+                        petName: pet.name
+                    };
+                    // Call our mail handler to manage sending emails
+                    mailer.sendMail(user, req, res);
               })
               .catch(err => {
                 console.log('Error: ' + err);
               }); // end of catch
-        // })
+        })
     });
-      // });
     // something@something.something
     // 4242 4242 4242 4242
     // 08/21
