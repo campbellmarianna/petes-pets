@@ -65,3 +65,6 @@ Text feature so we no longer need Regex.
 Respond to JSON
 1. Detect JSON Requests in addition to handling rendering as we did before
 2. Test API endpoints
+
+Deployment Update Ideas:
+- To get pets possible add configuration of Database URI to Heroku

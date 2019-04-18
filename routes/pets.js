@@ -1,10 +1,10 @@
 // MODELS
 const Pet = require('../models/pet');
-// UPLOADING TO AWS S3
+ // UPLOADING TO AWS S3
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
-const client = require('../lib/uploader').petClient;
+const client = require('../lib/uploader');
 
 // PET ROUTES
 module.exports = (app) => {
@@ -20,22 +20,28 @@ module.exports = (app) => {
         console.log(req.file)
         var pet = new Pet(req.body);
         pet.save(function (err) {
-            // if (err) {return res.status(400).send({ err }) };
+            if (err) {
+                console.log(err)
+                return res.status(400).send({ err })
+            };
             if (req.file) {
                 client.upload(req.file.path, {}, function (err, versions, meta) {
                     // STATUS OF 400 FOR VALIDATIONS
-                    if (err) {return res.status(400).send({ err }) };
+                    if (err) {
+                        console.log(err)
+                        return res.status(400).send({ err })
+                    };
 
-                    const imgUrl = versions[0].url.split('-');
+                    let imgUrl = versions[0].url.split('-');
                     imgUrl.pop();
-                    imgUrl.join('-');
+                    imgUrl = imgUrl.join('-');
                     pet.avatarUrl = imgUrl;
                     pet.save();
 
-                    res.send({ pet: pet });
+                    res.send({ pet });
                 });
             } else {
-                res.send({ pet: pet});
+                res.send({ pet });
             }
         });
     });
@@ -144,7 +150,7 @@ module.exports = (app) => {
               const charge = stripe.charges.create({
                 amount: pet.price * 100,
                 currency: 'usd',
-                description: `Example charge`,
+                description: `Purchased ${pet.name}, ${pet.species}`,
                 source: token,
               })
               .then((chg) => {
